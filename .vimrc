@@ -9,23 +9,28 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 " Keep Plugin commands between vundle#begin/end.
-
 Plugin 'scrooloose/nerdtree'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'scrooloose/nerdcommenter'
 Plugin 'easymotion/vim-easymotion'
+
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'Valloric/YouCompleteMe'
+" snippets
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
+
 
 "" General
 set number	" Show line numbers
 set showmatch	" Highlight matching brace
 set cursorline  "Highlight cursorline
 highlight CursorLine   cterm=NONE ctermbg=black "cursorline highlight color
+set mouse=a
 
 "search 
 set hlsearch    " Highlight search results
@@ -49,78 +54,87 @@ syntax enable	"Enable syntax highlighting
 set foldmethod=indent
 set foldlevel=99
 
+"Ex <tab> autocomplete config
+set wildmenu
+set wildmode=full
+
 ""colorscheme
 " set t_Co=256
 set termguicolors
 colorscheme molokai
 
+if has("gui_running")
+    if has("gui_gtk2")
+	:set guifont=Mono\ 12 
+    elseif has("x11")
+	" Also for GTK 1
+	:set guifont=*-lucidatypewriter-medium-r-normal-*-*-180-*-*-m-*-*
+    elseif has("gui_win32")
+	:set guifont=Luxi_Mono:h12:cANSI
+    endif
+endif
+
 
 ""map
-let mapleader = '\'  " specifiy <Leader>
+let mapleader = " "  " specifiy <Leader>
 "tab move
 nmap <C-h> gT<CR>
 nmap <C-l> gt<CR>
+
 "quickfix
 nmap <C-j> :cn<CR>
 nmap <C-k> :cp<CR>
-" Plugin NERDTreeToggle open directory tree 
-nnoremap <C-\> :NERDTreeToggle<CR>
-"Plugin YouCompleteMe Goto defination (same as Pycharm)
-nnoremap <C-b> :YcmCompleter GoTo<CR> 
-"Plugin YouCompleteMe GetDoc
-nnoremap <Leader>gd :YcmCompleter GetDoc<CR>
-"Plugin YouCompleteMe GoToReferences
-nnoremap <Leader>gr :YcmCompleter GoToReferences<CR>
-" Enable folding with the spacebar
-nnoremap <space> za
 
-""EasyMotion configuration
+"toggle code folding
+nnoremap <Leader>z za
+
+"Plugin NERDTreeToggle open directory tree 
+nnoremap <C-\> :NERDTreeToggle<CR>
+
+""Plugin NERDCommenter toggle comment
+map <C-_> <plug>NERDCommenterToggle
+
+""(built-in)Plugin netrw configure
+" let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+
+""Plugin EasyMotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1  " Turn on case insensitive feature 
-
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
 " <Leader>s{char}{label}
 nmap <Leader>s <Plug>(easymotion-overwin-f)
-
-" JK motions: Line motions
+"Line motions
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
-
-"" YouCompleteMe configuration
+""Plugin YouCompleteMe
 let g:ycm_server_python_interpreter = '/usr/bin/python'
 let g:ycm_python_binary_path = 'python3'
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
+"Goto defination (same as Pycharm)
+nnoremap <C-b> :YcmCompleter GoTo<CR> 
+"GetDoc
+nnoremap <Leader>gd :YcmCompleter GetDoc<CR>
+"GoToReferences
+nnoremap <Leader>gr :YcmCompleter GoToReferences<CR>
+" cnacel the default <TAB> cycle for UltiSnips
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 
+"Plugin ultisnippet
+let g:UltiSnipsExpandTrigger="<TAB>"
+let g:UltiSnipsJumpForwardTrigger="<TAB>"
+let g:UltiSnipsJumpBackwardTrigger="<S-TAB>"
 
-""Python PEP8
-au BufNewFile,BufRead *.py
-\ set tabstop=4 |
-\ set softtabstop=4 |
-\ set shiftwidth=4 |
-\ set textwidth=79 |
-\ set expandtab |
-\ set autoindent |
-\ set fileformat=unix |
-
-"python with virtualenv support
-py3 << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
 
 ""html css js
-au BufNewFile,BufRead *.js, *.html, *.css
+autocmd BufNewFile,BufRead *.html,*.css
 \ set tabstop=2 |
 \ set softtabstop=2 |
 \ set shiftwidth=2 |
 
 ""flag unnecessary white space
 highlight BadWhitespace ctermbg=red guibg=darkred
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
+autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
