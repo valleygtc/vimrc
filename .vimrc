@@ -14,7 +14,7 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'easymotion/vim-easymotion'
-Plugin 'Townk/vim-autoclose'
+Plugin 'jiangmiao/auto-pairs'
 Plugin 'alvan/vim-closetag'
 Plugin 'Valloric/MatchTagAlways'
 Plugin 'sheerun/vim-polyglot'
@@ -27,6 +27,8 @@ Plugin 'honza/vim-snippets'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
+" vim's own package
+packadd! matchit
 
 
 "" General
@@ -77,6 +79,16 @@ if has("gui_running")
 	:set guifont=Luxi_Mono:h12:cANSI
     endif
 endif
+
+"better Ex command search
+cnoremap <c-n>  <down>
+cnoremap <c-p>  <up>
+
+"for Esc key stroke
+set timeout           " for mappings
+set timeoutlen=1000   " default value
+set ttimeout          " for key codes
+set ttimeoutlen=10    " unnoticeable small value
 
 
 ""map
