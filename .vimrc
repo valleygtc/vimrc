@@ -125,6 +125,7 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
 ""Plugin YouCompleteMe
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_server_python_interpreter = '/usr/bin/python'
 let g:ycm_python_binary_path = 'python3'
 let g:ycm_add_preview_to_completeopt = 1
@@ -138,6 +139,9 @@ nnoremap <Leader>gr :YcmCompleter GoToReferences<CR>
 " cnacel the default <TAB> cycle for UltiSnips
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+"using <Enter> to confirm choice(remove popmenu) bug:don't close popmenu
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+let g:ycm_key_list_stop_completion = ['<C-y>', '<Enter>']
 
 "Plugin ultisnippet
 let g:UltiSnipsExpandTrigger="<TAB>"
